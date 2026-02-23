@@ -9,6 +9,7 @@ import { APP_TAGLINE } from '@/lib/constants'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 async function loadFeaturedSection(
   supabase: any,
   section: string,
@@ -18,7 +19,7 @@ async function loadFeaturedSection(
   fallbackAsc: boolean,
   limit: number,
   extraFilter?: { field: string; value: any }
-) {
+): Promise<any[]> {
   const { data: featured } = await supabase
     .from('featured_items')
     .select(`${idField}, display_order`)
