@@ -1,6 +1,7 @@
 // 취준진담 상수 정의
 
-export const SUPER_ADMIN_EMAIL = 'branden@da-sh.io'
+export const SUPER_ADMIN_EMAILS = ['branden@da-sh.io', 'jenny@da-sh.io']
+export const SUPER_ADMIN_EMAIL = 'branden@da-sh.io' // 하위 호환
 
 export const APP_NAME = '취준진담'
 export const APP_DESCRIPTION = '취업 준비생을 위한 강의, 콘텐츠, 정보, 네트워킹을 한 곳에서'

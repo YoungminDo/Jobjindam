@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { UserPlus } from 'lucide-react'
-import { SUPER_ADMIN_EMAIL } from '@/lib/constants'
+import { SUPER_ADMIN_EMAILS } from '@/lib/constants'
 
 export default function AdminSignupPage() {
   const [name, setName] = useState('')
@@ -63,7 +63,7 @@ export default function AdminSignupPage() {
     }
 
     // 2) 프로필 생성 대기 (트리거가 비동기로 실행될 수 있음)
-    const isSuperAdmin = email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase()
+    const isSuperAdmin = SUPER_ADMIN_EMAILS.some(e => e.toLowerCase() === email.toLowerCase())
     const adminRole = isSuperAdmin ? 'super' : 'pending'
 
     // 트리거가 프로필을 만들 때까지 최대 3초 대기

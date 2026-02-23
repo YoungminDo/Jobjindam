@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Shield } from 'lucide-react'
-import { SUPER_ADMIN_EMAIL } from '@/lib/constants'
+import { SUPER_ADMIN_EMAILS } from '@/lib/constants'
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
 
     // 프로필이 없으면 생성 시도 (트리거 실패 대비)
     if (!profile) {
-      const isSuperAdmin = email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase()
+      const isSuperAdmin = SUPER_ADMIN_EMAILS.some(e => e.toLowerCase() === email.toLowerCase())
       await supabase.from('profiles').upsert({
         id: data.user.id,
         email: data.user.email || email,
@@ -69,7 +69,7 @@ export default function AdminLoginPage() {
 
     // 3) admin_role이 아예 없는 경우 (일반 사이트에서 가입한 유저)
     if (!profile.admin_role) {
-      const isSuperAdmin = email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase()
+      const isSuperAdmin = SUPER_ADMIN_EMAILS.some(e => e.toLowerCase() === email.toLowerCase())
 
       if (isSuperAdmin) {
         // 슈퍼관리자 이메일이면 자동으로 super 권한 부여
