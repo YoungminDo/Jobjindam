@@ -1,0 +1,137 @@
+# ============================================
+# MVP Factory Rules - Claude Code
+# ============================================
+# 이 파일은 빠른 MVP 개발을 위한 작업 규칙입니다.
+# 모든 프로젝트는 이 규칙을 따릅니다.
+
+## 기술 스택 (고정)
+- Framework: Next.js 14 (App Router, Turbopack)
+- Language: TypeScript (strict mode)
+- Styling: Tailwind CSS
+- UI Components: shadcn/ui
+- Backend: Supabase (Auth + Database + Storage + Realtime)
+- Deployment: Vercel
+
+## 자동 처리 항목
+새 MVP 시작 시 자동으로 생성:
+1. Next.js 14 App Router 프로젝트 구조
+2. Supabase 클라이언트 설정 (lib/supabase.ts)
+3. 인증 시스템 (로그인/회원가입/로그아웃)
+4. 기본 레이아웃 (Header, Footer, Sidebar)
+5. 환경변수 템플릿 (.env.local.example)
+6. 기본 미들웨어 (middleware.ts)
+
+## MVP 요청 처리 프로세스
+사용자가 MVP 아이디어를 말하면:
+1. **분석** - 핵심 기능 3~5개 추출
+2. **스키마** - Supabase 데이터베이스 스키마 제안
+3. **화면** - 필요한 페이지/화면 구성 제안
+4. **확인** - 사용자 확인 후 구현 시작
+5. **구현** - 페이지 단위로 순차 구현
+6. **검증** - 빌드 확인 및 타입 체크
+
+## 프로젝트 구조 (표준)
+```
+src/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/page.tsx
+│   │   └── signup/page.tsx
+│   ├── (main)/
+│   │   ├── layout.tsx
+│   │   └── dashboard/page.tsx
+│   ├── api/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   ├── ui/              # shadcn/ui 컴포넌트
+│   ├── layout/          # Header, Footer, Sidebar
+│   └── features/        # 기능별 컴포넌트
+├── lib/
+│   ├── supabase/
+│   │   ├── client.ts    # 브라우저용 클라이언트
+│   │   ├── server.ts    # 서버용 클라이언트
+│   │   └── middleware.ts # 미들웨어용 클라이언트
+│   ├── utils.ts
+│   └── constants.ts
+├── hooks/               # 커스텀 훅
+├── types/               # 타입 정의
+└── middleware.ts
+```
+
+## 코딩 규칙
+
+### 컴포넌트 규칙
+- Server Component가 기본값
+- Client Component는 반드시 `'use client'` 명시
+- 컴포넌트 파일명: PascalCase (e.g., UserCard.tsx)
+- 페이지/레이아웃: kebab-case 폴더 + page.tsx
+
+### TypeScript 규칙
+- strict mode 필수
+- `any` 사용 금지 → `unknown` 또는 구체적 타입 사용
+- 인터페이스는 `types/` 폴더에 정의
+- API 응답 타입 반드시 정의
+
+### Supabase 규칙
+- RLS (Row Level Security) 정책 반드시 작성
+- 서버 컴포넌트에서는 `createServerClient` 사용
+- 클라이언트 컴포넌트에서는 `createBrowserClient` 사용
+- 미들웨어에서 세션 갱신 처리
+
+### 스타일 규칙
+- Tailwind CSS 유틸리티 클래스 사용
+- shadcn/ui 컴포넌트 우선 사용
+- 커스텀 CSS 최소화
+- 반응형 디자인 필수 (mobile-first)
+
+### 에러 처리
+- 모든 API 호출에 try-catch 적용
+- error.tsx 파일로 에러 바운더리 구성
+- loading.tsx 파일로 로딩 상태 표시
+- 사용자 친화적 에러 메시지
+
+### 보안 규칙
+- 환경변수는 절대 클라이언트에 노출하지 않음 (NEXT_PUBLIC_ 제외)
+- SQL 인젝션 방지: Supabase 클라이언트 메서드 사용
+- XSS 방지: 사용자 입력 sanitize
+- CSRF: Next.js 기본 보호 활용
+- 인증 필요 페이지는 미들웨어에서 체크
+
+### 성능 규칙
+- 이미지: next/image 사용
+- 폰트: next/font 사용
+- 동적 import 활용 (heavy 컴포넌트)
+- Supabase 쿼리에 select 컬럼 명시
+
+## 명명 규칙
+- 변수/함수: camelCase
+- 컴포넌트: PascalCase
+- 파일명(컴포넌트): PascalCase.tsx
+- 파일명(유틸): camelCase.ts
+- 상수: UPPER_SNAKE_CASE
+- 타입/인터페이스: PascalCase
+- DB 테이블: snake_case
+- DB 컬럼: snake_case
+- URL 경로: kebab-case
+
+## 커밋 메시지 규칙
+- feat: 새 기능
+- fix: 버그 수정
+- style: UI/스타일 변경
+- refactor: 리팩토링
+- docs: 문서 수정
+- chore: 설정/빌드 변경
+
+## 환경변수 템플릿
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=
+```
