@@ -30,7 +30,7 @@ async function loadFeaturedSection(
     const ids = featured.map((f: any) => f[idField]).filter(Boolean)
     const { data } = await supabase.from(table).select('*').in('id', ids)
     const orderMap = new Map(featured.map((f: any) => [f[idField], f.display_order]))
-    let items = (data || []).sort((a: any, b: any) => (orderMap.get(a.id) || 99) - (orderMap.get(b.id) || 99))
+    let items = (data || []).sort((a: any, b: any) => Number(orderMap.get(a.id) ?? 99) - Number(orderMap.get(b.id) ?? 99))
     if (items.length < limit) {
       let q = supabase.from(table).select('*')
         .not('id', 'in', `(${items.map((i: any) => i.id).join(',') || '00000000-0000-0000-0000-000000000000'})`)
